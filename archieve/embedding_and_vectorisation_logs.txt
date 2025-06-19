@@ -1,0 +1,160 @@
+
+(myenv) thangarajn@Thangarajs-MacBook-Air NCERT-Tutor % 
+(myenv) thangarajn@Thangarajs-MacBook-Air NCERT-Tutor % python3 build_vector_store.py
+[INFO] Loading and splitting all documents...
+Grade: 10, Subject: science, Chapter: 03_metals_and_nonmetals
+[INFO] Processing → Grade 10, Subject science, Chapter 03_metals_and_nonmetals
+Grade: 10, Subject: science, Chapter: 09_light_reflection_and_refraction
+[INFO] Processing → Grade 10, Subject science, Chapter 09_light_reflection_and_refraction
+Grade: 10, Subject: science, Chapter: 10_the_human_eye_and_the_colourful_world
+[INFO] Processing → Grade 10, Subject science, Chapter 10_the_human_eye_and_the_colourful_world
+Grade: 10, Subject: science, Chapter: 07_how_do_organisms_reproduce
+[INFO] Processing → Grade 10, Subject science, Chapter 07_how_do_organisms_reproduce
+Grade: 10, Subject: science, Chapter: 01_chemical_reactions_and_equations
+[INFO] Processing → Grade 10, Subject science, Chapter 01_chemical_reactions_and_equations
+Grade: 10, Subject: science, Chapter: 14_answers
+[INFO] Processing → Grade 10, Subject science, Chapter 14_answers
+Grade: 10, Subject: science, Chapter: 04_carbon_and_its_compounds
+[INFO] Processing → Grade 10, Subject science, Chapter 04_carbon_and_its_compounds
+Grade: 10, Subject: science, Chapter: 08_heredity
+[INFO] Processing → Grade 10, Subject science, Chapter 08_heredity
+Grade: 10, Subject: science, Chapter: 02_acids_bases_and_salts
+[INFO] Processing → Grade 10, Subject science, Chapter 02_acids_bases_and_salts
+Grade: 10, Subject: science, Chapter: 06_control_and_coordination
+[INFO] Processing → Grade 10, Subject science, Chapter 06_control_and_coordination
+Grade: 10, Subject: science, Chapter: 12_magnetic_effects_of_electric_current
+[INFO] Processing → Grade 10, Subject science, Chapter 12_magnetic_effects_of_electric_current
+Grade: 10, Subject: science, Chapter: 13_our_environment
+[INFO] Processing → Grade 10, Subject science, Chapter 13_our_environment
+Grade: 10, Subject: science, Chapter: 11_electricity
+[INFO] Processing → Grade 10, Subject science, Chapter 11_electricity
+Grade: 10, Subject: science, Chapter: 05_life_processes
+[INFO] Processing → Grade 10, Subject science, Chapter 05_life_processes
+Grade: 11, Subject: physics, Chapter: 08_mechanical_properties_of_solids
+[INFO] Processing → Grade 11, Subject physics, Chapter 08_mechanical_properties_of_solids
+Grade: 11, Subject: physics, Chapter: 01_units_and_measurements
+[INFO] Processing → Grade 11, Subject physics, Chapter 01_units_and_measurements
+Grade: 11, Subject: physics, Chapter: 04_laws_of_motion
+[INFO] Processing → Grade 11, Subject physics, Chapter 04_laws_of_motion
+Grade: 11, Subject: physics, Chapter: 12_kinetic_theory
+[INFO] Processing → Grade 11, Subject physics, Chapter 12_kinetic_theory
+Grade: 11, Subject: physics, Chapter: 09_mechanical_properties_of_fluids
+[INFO] Processing → Grade 11, Subject physics, Chapter 09_mechanical_properties_of_fluids
+Grade: 11, Subject: physics, Chapter: 13_oscillations
+[INFO] Processing → Grade 11, Subject physics, Chapter 13_oscillations
+Grade: 11, Subject: physics, Chapter: 10_thermal_properties_of_matter
+[INFO] Processing → Grade 11, Subject physics, Chapter 10_thermal_properties_of_matter
+Grade: 11, Subject: physics, Chapter: 02_motion_in_a_straight_line
+[INFO] Processing → Grade 11, Subject physics, Chapter 02_motion_in_a_straight_line
+Grade: 11, Subject: physics, Chapter: 14_waves
+[INFO] Processing → Grade 11, Subject physics, Chapter 14_waves
+Grade: 11, Subject: physics, Chapter: 11_thermodynamics
+[INFO] Processing → Grade 11, Subject physics, Chapter 11_thermodynamics
+Grade: 11, Subject: physics, Chapter: 07_gravitation
+[INFO] Processing → Grade 11, Subject physics, Chapter 07_gravitation
+Grade: 11, Subject: physics, Chapter: 03_motion_in_a_plane
+[INFO] Processing → Grade 11, Subject physics, Chapter 03_motion_in_a_plane
+Grade: 11, Subject: physics, Chapter: 05_work_energy_power
+[INFO] Processing → Grade 11, Subject physics, Chapter 05_work_energy_power
+Grade: 11, Subject: physics, Chapter: 06_system_of_particles_rotational_motion
+[INFO] Processing → Grade 11, Subject physics, Chapter 06_system_of_particles_rotational_motion
+Grade: 11, Subject: computer, Chapter: 03_emerging_trends
+[INFO] Processing → Grade 11, Subject computer, Chapter 03_emerging_trends
+Grade: 11, Subject: computer, Chapter: 09_lists
+[INFO] Processing → Grade 11, Subject computer, Chapter 09_lists
+Grade: 11, Subject: computer, Chapter: 02_encoding_schemes_and_number_systems
+[INFO] Processing → Grade 11, Subject computer, Chapter 02_encoding_schemes_and_number_systems
+Grade: 11, Subject: computer, Chapter: 10_tuples_and_dictionaries
+[INFO] Processing → Grade 11, Subject computer, Chapter 10_tuples_and_dictionaries
+Grade: 11, Subject: computer, Chapter: 07_functions
+[INFO] Processing → Grade 11, Subject computer, Chapter 07_functions
+Grade: 11, Subject: computer, Chapter: 06_flow_of_control
+[INFO] Processing → Grade 11, Subject computer, Chapter 06_flow_of_control
+Grade: 11, Subject: computer, Chapter: 11_societal_impact
+[INFO] Processing → Grade 11, Subject computer, Chapter 11_societal_impact
+Grade: 11, Subject: computer, Chapter: 04_introduction_to_problem_solving
+[INFO] Processing → Grade 11, Subject computer, Chapter 04_introduction_to_problem_solving
+Grade: 11, Subject: computer, Chapter: 01_computer_systems
+[INFO] Processing → Grade 11, Subject computer, Chapter 01_computer_systems
+Grade: 11, Subject: computer, Chapter: 08_strings
+[INFO] Processing → Grade 11, Subject computer, Chapter 08_strings
+Grade: 11, Subject: computer, Chapter: 05_getting_started_with_python
+[INFO] Processing → Grade 11, Subject computer, Chapter 05_getting_started_with_python
+Grade: 12, Subject: chemistry, Chapter: 06_haloalkanes_and_haloarenes
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 06_haloalkanes_and_haloarenes
+Grade: 12, Subject: chemistry, Chapter: 07_alcohols_phenols_and_ethers
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 07_alcohols_phenols_and_ethers
+Grade: 12, Subject: chemistry, Chapter: 09_amines
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 09_amines
+Grade: 12, Subject: chemistry, Chapter: 05_coordination_compounds
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 05_coordination_compounds
+Grade: 12, Subject: chemistry, Chapter: 08_aldehydes_ketones_and_carboxylic_acids
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 08_aldehydes_ketones_and_carboxylic_acids
+Grade: 12, Subject: chemistry, Chapter: 10_biomolecules
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 10_biomolecules
+Grade: 12, Subject: chemistry, Chapter: 03_chemical_kinetics
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 03_chemical_kinetics
+Grade: 12, Subject: chemistry, Chapter: 01_solutions
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 01_solutions
+Grade: 12, Subject: chemistry, Chapter: 04_the_d_and_f_block_elements
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 04_the_d_and_f_block_elements
+Grade: 12, Subject: chemistry, Chapter: 02_electrochemistry
+[INFO] Processing → Grade 12, Subject chemistry, Chapter 02_electrochemistry
+Grade: 12, Subject: physics, Chapter: 04_moving_charges_and_magnetism
+[INFO] Processing → Grade 12, Subject physics, Chapter 04_moving_charges_and_magnetism
+Grade: 12, Subject: physics, Chapter: 08_electromagnetic_waves
+[INFO] Processing → Grade 12, Subject physics, Chapter 08_electromagnetic_waves
+Grade: 12, Subject: physics, Chapter: 10_wave_optics
+[INFO] Processing → Grade 12, Subject physics, Chapter 10_wave_optics
+Grade: 12, Subject: physics, Chapter: 06_electromagnetic_induction
+[INFO] Processing → Grade 12, Subject physics, Chapter 06_electromagnetic_induction
+Grade: 12, Subject: physics, Chapter: 13_nuclei
+[INFO] Processing → Grade 12, Subject physics, Chapter 13_nuclei
+Grade: 12, Subject: physics, Chapter: 14_semiconductor_electronics_devices_simple_circuits
+[INFO] Processing → Grade 12, Subject physics, Chapter 14_semiconductor_electronics_devices_simple_circuits
+Grade: 12, Subject: physics, Chapter: 02_electrostatic_potential_and_capacitance
+[INFO] Processing → Grade 12, Subject physics, Chapter 02_electrostatic_potential_and_capacitance
+Grade: 12, Subject: physics, Chapter: 09_ray_optics_and_optical_instruments
+[INFO] Processing → Grade 12, Subject physics, Chapter 09_ray_optics_and_optical_instruments
+Grade: 12, Subject: physics, Chapter: 07_alternating_current
+[INFO] Processing → Grade 12, Subject physics, Chapter 07_alternating_current
+Grade: 12, Subject: physics, Chapter: 05_magnetism_and_matter
+[INFO] Processing → Grade 12, Subject physics, Chapter 05_magnetism_and_matter
+Grade: 12, Subject: physics, Chapter: 03_current_electricity
+[INFO] Processing → Grade 12, Subject physics, Chapter 03_current_electricity
+Grade: 12, Subject: physics, Chapter: 01_electric_charges_and_fields
+[INFO] Processing → Grade 12, Subject physics, Chapter 01_electric_charges_and_fields
+Grade: 12, Subject: physics, Chapter: 11_dual_nature_of_radiation_and_matter
+[INFO] Processing → Grade 12, Subject physics, Chapter 11_dual_nature_of_radiation_and_matter
+Grade: 12, Subject: physics, Chapter: 12_atoms
+[INFO] Processing → Grade 12, Subject physics, Chapter 12_atoms
+Grade: 12, Subject: computer, Chapter: 01_exception_handling_in_python
+[INFO] Processing → Grade 12, Subject computer, Chapter 01_exception_handling_in_python
+Grade: 12, Subject: computer, Chapter: 12_security_aspects
+[INFO] Processing → Grade 12, Subject computer, Chapter 12_security_aspects
+Grade: 12, Subject: computer, Chapter: 09_sql
+[INFO] Processing → Grade 12, Subject computer, Chapter 09_sql
+Grade: 12, Subject: computer, Chapter: 08_database_concepts
+[INFO] Processing → Grade 12, Subject computer, Chapter 08_database_concepts
+Grade: 12, Subject: computer, Chapter: 03_stack
+[INFO] Processing → Grade 12, Subject computer, Chapter 03_stack
+Grade: 12, Subject: computer, Chapter: 06_searching
+[INFO] Processing → Grade 12, Subject computer, Chapter 06_searching
+Grade: 12, Subject: computer, Chapter: 10_computer_networks
+[INFO] Processing → Grade 12, Subject computer, Chapter 10_computer_networks
+Grade: 12, Subject: computer, Chapter: 02_file_handling_in_python
+[INFO] Processing → Grade 12, Subject computer, Chapter 02_file_handling_in_python
+Grade: 12, Subject: computer, Chapter: 07_understanding_data
+[INFO] Processing → Grade 12, Subject computer, Chapter 07_understanding_data
+Grade: 12, Subject: computer, Chapter: 11_data_communication
+[INFO] Processing → Grade 12, Subject computer, Chapter 11_data_communication
+Grade: 12, Subject: computer, Chapter: 05_sorting
+[INFO] Processing → Grade 12, Subject computer, Chapter 05_sorting
+Grade: 12, Subject: computer, Chapter: 13_project_based_learning
+[INFO] Processing → Grade 12, Subject computer, Chapter 13_project_based_learning
+Grade: 12, Subject: computer, Chapter: 04_queue
+[INFO] Processing → Grade 12, Subject computer, Chapter 04_queue
+Total chunks created: 4518
+[INFO] Creating vector store with 4518 chunks...
+[SUCCESS] Vector store saved to 'vector_store/'
+(myenv) thangarajn@Thangarajs-MacBook-Air NCERT-Tutor % 
