@@ -1,4 +1,5 @@
 pdfplumber
+pypdf
 langchain
 langchain-community
 streamlit
@@ -9,3 +10,4 @@ langchain-chroma
 langchain-groq
 langchain-ollama
 langchain-openai
+sarvamai

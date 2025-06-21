@@ -12,6 +12,11 @@ import pdb,re
 from langchain_groq import ChatGroq
 from pydantic import BaseModel
 from langchain_core.runnables import RunnableSequence 
+import os
+# --- SARVAM INTEGRATION START ---
+from sarvamai import SarvamAI # Import SarvamAI client
+import requests # Keep requests for potential error handling, though sarvamai client handles calls
+# --- SARVAM INTEGRATION END ---
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -22,6 +27,92 @@ session_histories = {}
 translation_chains = {}
 exercise_chains = {}
 general_chains = {}
+
+
+
+# Load environment variables
+load_dotenv()
+
+# --- SARVAM INTEGRATION START ---
+sarvam_api_key = os.getenv("SARVAM_API_KEY")
+
+# Basic check to ensure keys are loaded
+if not sarvam_api_key:
+     raise ValueError("SARVAM_API_KEY environment variable not set.")
+
+# Initialize SarvamAI client globally
+try:
+    sarvam_client = SarvamAI(api_subscription_key=sarvam_api_key)
+    print("✅ Sarvam AI client initialized")
+except Exception as e:
+    print(f"Error initializing Sarvam AI client: {e}")
+    sarvam_client = None # Set client to None if initialization fails
+
+# Mapping for Indian languages using Sarvam's xx-IN codes
+INDIAN_LANG_MAP = {
+    "hindi": "hi-IN",
+    "tamil": "ta-IN",
+    "kannada": "kn-IN",
+    "malayalam": "ml-IN",
+    # Add other languages from the notebook's list if needed
+}
+
+SARVAM_MAX_CHUNK_LENGTH = 2000 # Max characters per chunk for sarvam-translate:v1
+
+def chunk_text(text, max_length=SARVAM_MAX_CHUNK_LENGTH):
+    """Splits text into chunks of at most max_length characters while preserving word boundaries."""
+    chunks = []
+    while len(text) > max_length:
+        # Find the last space within the limit to avoid splitting words
+        split_index = text.rfind(" ", 0, max_length)
+        if split_index == -1:
+            split_index = max_length  # No space found, force split at max_length
+
+        chunks.append(text[:split_index].strip())  # Trim spaces before adding
+        text = text[split_index:].lstrip()  # Remove leading spaces for the next chunk
+
+    if text:
+        chunks.append(text.strip())  # Add the last chunk
+
+    return chunks
+
+def translate_text(text: str, target_lang_code: str) -> str:
+    """Calls Sarvam AI Translation API to translate text using sarvam-translate:v1."""
+    if sarvam_client is None:
+         print("Sarvam AI client not initialized, cannot translate.")
+         return text # Return original text if client is missing
+
+    chunks = chunk_text(text, max_length=SARVAM_MAX_CHUNK_LENGTH)
+    translated_chunks = []
+
+    for idx, chunk in enumerate(chunks):
+        if not chunk: # Skip empty chunks
+            continue
+        try:
+            # Call the Sarvam AI translation API for each chunk
+            response = sarvam_client.text.translate(
+                input=chunk,
+                source_language_code="en-IN", # Assuming RAG output is English
+                target_language_code="hi-IN",
+                speaker_gender="Male", # Defaulting as per notebook examples
+                mode="formal", # sarvam-translate:v1 only supports formal
+                # model="sarvam-translate:v1",
+                enable_preprocessing=False, # As per notebook examples
+                # numerals_format="international", # Can add this if needed
+            )
+            # The translated text is in the 'translated_text' attribute of the response object
+            translated_chunks.append(response.translated_text)
+
+        except Exception as e: # Catch potential exceptions from sarvamai library or API errors
+            print(f"Error translating chunk {idx+1}: {e}")
+            # If any chunk fails, return the original English text for the whole response
+            print("Translation failed for a chunk. Returning original text.")
+            return text # Exit the loop and return original English text
+
+    # Join the translated chunks. Notebook examples use newline, let's follow that.
+    return "\n".join(translated_chunks)
+
+# --- SARVAM INTEGRATION END ---
 
 def get_session_history(session_id):
     if session_id not in session_histories:
@@ -264,10 +355,43 @@ def run_translation_chain(arguments, session_id):
         - answer: The generated answer from the translation chain
         - retrieved_documents: List of DocumentInfo objects containing source information
     """
+    # Assume arguments.query is the text to translate
+    english_answer = arguments.query
+    translation_requested = True
+
+    target_lang_code = None
+    target_lang_name = None
+
+    if arguments.target_language:
+        lang = arguments.target_language.strip().lower()
+        if lang in INDIAN_LANG_MAP:
+            target_lang_code = INDIAN_LANG_MAP[lang]
+            target_lang_name = lang
+        else:
+            available_langs = ", ".join(INDIAN_LANG_MAP.keys())
+            msg = (
+                f"Sorry, translation to '{arguments.target_language}' is not available. "
+                f"Available languages: {available_langs}.\n"
+                "Returning the English answer."
+            )
+            return Response(
+                answer=f"{arguments.question}\n\n{msg}",
+                retrieved_documents=[]
+            )
+    if translation_requested and target_lang_code:
+        print(f"Translation requested to {target_lang_name} ({target_lang_code}). Translating...")
+        translated_text = translate_text(english_answer, target_lang_code)
+        if translated_text != english_answer:
+            final_answer = translated_text
+            print("Translation successful.")
+        else:
+            print(f"Translation to {target_lang_name} failed. Returning English answer.")
+            final_answer = english_answer + f"\n\n(Note: Translation to {target_lang_name} failed.)"
+
     return Response(
-        answer="Translation functionality is not yet implemented.",
+        answer=final_answer,
         retrieved_documents=[]
-    )  # Placeholder response until translation chain is implemented
+    )
 
 def run_exercise_chain(arguments, session_id):
     """Run the exercise chain with the provided arguments and session ID.
