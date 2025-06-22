@@ -120,8 +120,29 @@ if st.session_state.view == "chat":
             )
             st.markdown("<div style='clear: both;'></div>", unsafe_allow_html=True)
 
-    # Input box
-    st.text_input("Enter your question:", key="input_box", on_change=submit_question)
+    # Input box with lighter placeholder
+    st.text_input(
+        label="",
+        key="input_box",
+        on_change=submit_question,
+        placeholder="Enter your question here..."
+    )
+
+    # Prompt suggestions
+    st.markdown(
+        """
+        <div style='margin-top: 10px; color: #888;'>
+            <b>Suggestions:</b>
+            <ul style='margin: 0 0 0 20px; padding: 0; color: #888;'>
+                <li>What is Newton's first law?</li>
+                <li>Give me a quiz on photosynthesis.</li>
+                <li>Explain force in Tamil.</li>
+            </ul>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 
     if st.button("📚 Cite Sources"):
         docs = st.session_state.get("last_docs", [])

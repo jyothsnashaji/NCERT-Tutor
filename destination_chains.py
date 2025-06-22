@@ -93,7 +93,7 @@ def translate_text(text: str, target_lang_code: str) -> str:
             response = sarvam_client.text.translate(
                 input=chunk,
                 source_language_code="en-IN", # Assuming RAG output is English
-                target_language_code="hi-IN",
+                target_language_code=target_lang_code,
                 speaker_gender="Male", # Defaulting as per notebook examples
                 mode="formal", # sarvam-translate:v1 only supports formal
                 # model="sarvam-translate:v1",
@@ -139,7 +139,7 @@ class ExplainDestinationChain():
         self.session_id = session_id
         self.llm =  ChatOpenAI(model="gpt-4o-mini")
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-        self.vectorstore = FAISS.load_local("/Users/jshaji/Library/CloudStorage/OneDrive-Cisco/IISc/Deep Learning/NCERT-Tutor/vector_store_physics", self.embeddings, allow_dangerous_deserialization=True)
+        self.vectorstore = FAISS.load_local("/Users/jshaji/Library/CloudStorage/OneDrive-Cisco/IISc/Deep Learning/NCERT-Tutor/vector_store", self.embeddings, allow_dangerous_deserialization=True)
         self.retriever = self.vectorstore.as_retriever()
         self._chain = explain_prompt | self.llm
       
@@ -214,7 +214,7 @@ class ExerciseDestinationChain():
         self.session_id = session_id
         self.llm =  ChatOpenAI(model="gpt-4o-mini")
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-        self.vectorstore = FAISS.load_local("/Users/jshaji/Library/CloudStorage/OneDrive-Cisco/IISc/Deep Learning/NCERT-Tutor/vector_store_physics", self.embeddings, allow_dangerous_deserialization=True)
+        self.vectorstore = FAISS.load_local("/Users/jshaji/Library/CloudStorage/OneDrive-Cisco/IISc/Deep Learning/NCERT-Tutor/vector_store", self.embeddings, allow_dangerous_deserialization=True)
         self.retriever = self.vectorstore.as_retriever()
         self._chain = quiz_prompt | self.llm
 
