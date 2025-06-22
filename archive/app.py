@@ -45,7 +45,7 @@ vector_db = load_vector_db(vector_db_path)
 print("✅ Vector DB loaded")
 
 # -------------------- LLM & Retriever --------------------
-groq_api_key = "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"
+groq_api_key = ""
 llm = ChatGroq(groq_api_key=groq_api_key, model="llama3-8b-8192")
 
 # Define system prompt
