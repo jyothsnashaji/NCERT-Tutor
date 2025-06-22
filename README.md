@@ -45,5 +45,11 @@ The resulting vector store is saved locally in the 'vector_store' directory for 
 
 ## To Do
 1. Add Translation Support
-2. Update exerise generation with other model
+2. Update exerise generation with T5
 3. Add evaluation dataset and metrics
+
+## Demo
+
+![Explaination Response](demo/Explaination.jpg)
+![RAG Response](demo/sources.jpg)
+![Exercise Response](demo/quiz.jpg)
