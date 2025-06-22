@@ -52,4 +52,5 @@ The resulting vector store is saved locally in the 'vector_store' directory for 
 
 ![Explaination Response](Demo/Explaination.jpg)
 ![RAG Response](Demo/sources.jpg)
-![Exercise Response](Demo/quiz.jpg)
+![Exercise Response](Demo/Quiz.jpg)
+![Evaluation](Demo/Evaluation.jpg)
