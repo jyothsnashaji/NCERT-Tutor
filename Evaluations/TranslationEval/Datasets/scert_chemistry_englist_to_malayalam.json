@@ -1,0 +1,42 @@
+[
+    {
+        "sourceText": "Aluminium is manufactured by the reduction of alumina using electricity as reducing agent since the reactivity of aluminum is very high.",
+        "targetText": "അലുമിനിയത്തിനു ക്രിയാശീലം വളരെ കൂടുതലായതിനാൽ അലുമിനിയെ  വൈദ്യുതി ഉപയോഗിച് നിരോസ്ക്സികരിച്ചാണ് അലൂമിനിയം നിർമിക്കുന്നത്"
+    },
+    {
+        "sourceText": "The process of obtaining a coating of one metal over another metal using electrolysis is known as electro plating.",
+        "targetText": "വൈദ്യുത വിശ്ലേഷണം വഴി ഒരു ലോഹത്തിന് മേൽ മറ്റൊരു ലോഹം ആവരണം ചെയ്‌തെടുക്കുന്ന രീതിയാണ് എലെക്ട്രോപ്ലേറ്റിംഗ്"
+    },
+    {
+        "sourceText": "Sodium chloride in solid state is not an electrical conductor because its ions have no freedom of movement",
+        "targetText": "ഖരാവസ്ഥയിലുള്ള സോഡിയം ക്ലോറൈഡ് വൈദ്യുതി വാഹിയല്ല , കാരണം ഇതിൽ ഈയോൺസിന് ചലന സ്വാതത്ര്യം ഇല്ല"
+    },
+    {
+        "sourceText":"Galvanic cell is an arrangement in which the difference in reactivity of metals is used to produce electricity",
+        "targetText":"ക്രിയാശീലത്തിലുള്ള ഈ വ്യത്യാസം പ്രയോജനപ്പെടുത്തി വൈദ്യുതി നിർമിക്കാൻ ഉപയോഗിക്കുന്ന സംവിധാനം ആണ് ഗാൽവാനിക് സെൽ"
+    },
+    {
+        "sourceText": "If the temperature and pressure are kept constant how can we increase the volume?",
+        "targetText": "താപനിലയും മർദ്ദവും സ്ഥിരമാണെങ്കിൽ വ്യാപ്തം വർധിപ്പിക്കാൻ എന്താണു മാർഗം?"
+    },
+    {
+        "sourceText": "The space occupied by a substance is known as its volume.",
+        "targetText": "ഒരു പദാർത്ഥത്തിനു സ്ഥിതി ചെയ്യാൻ ആവശ്യം ആയ സ്ഥലത്തിന്റെ അളവിനെയാണു അതിന്റെ വ്യാപ്തം എന്ന് പറയുന്നത്"
+    },
+    {
+        "sourceText": "When a ray of light entering obliquely from one transparent medium to another, its path undergoes a deviation at the surface of separation. This is refraction.",
+        "targetText": "ഇത്തരത്തിൽ ഒരു സുതാര്യ മാധ്യമത്തിൽ നിന്ന് പ്രകാശിക സാന്ദ്രതയിൽ വ്യത്യാസമുള്ള മറ്റൊരു മാധ്യമത്തിലേക്കു പ്രകാശം ചരിഞ്ഞു പതിക്കുമ്പോൾ മാധ്യമങ്ങളുടെ വിഭജന തലത്തിൽ വെച്ച് അതിന്റെ പാതയ്ക്കു വ്യതിയാനം സംഭവിക്കുന്നു. ഇതാണ് അപവർത്തനം."
+    },
+    {
+        "sourceText":"Far point is the farthest point at which the objects can be seen distinctly. The far point of an eye with healthy vision is at infinity.",
+        "targetText": "ഒരു വസ്തുവിനെ വ്യക്തമായി കാണാൻ കഴിയുന്ന ഏറ്റവും അകലെയുള്ള ബിന്ദുവാണ് ഫാർ പോയിന്റ് . ഈ ദൂരം അനന്തമായി കണക്കാക്കപ്പെടുന്നു. "
+    },
+    {
+        "sourceText": "Focal length is the distance from the optic centre to the principal focus.",
+        "targetText": "പ്രകാശികകേന്ദ്രത്തിൽ നിന്ന് മുഖ്യ ഫോക്കസിലേക്കുള്ള ദൂരമാണ് ഫോക്കസ് ദൂരം "
+    },
+    {
+        "sourceText": "Fuels burn with the help of oxygen.",
+        "targetText": "ഇന്ധനങ്ങൾ ജ്വലിക്കുന്നത് ഓക്‌സിജന്റെ സഹായത്താലാണ്"
+    }
+]
