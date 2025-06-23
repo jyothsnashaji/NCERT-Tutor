@@ -12,6 +12,8 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 
+# Import the centralized session management functions
+from session_manager import get_session_history, get_chat_history
 
 # -------------------- FastAPI Setup --------------------
 app = FastAPI()
@@ -24,29 +26,79 @@ class Query(BaseModel):
 # -------------------- LLM & Retriever --------------------
 llm = ChatGroq(model="llama3-8b-8192")
 
-# -------------------- Memory --------------------
-
-# Store sessions
-session_histories = {}
-
-def get_session_history(session_id):
-    if session_id not in session_histories:
-        session_histories[session_id] = InMemoryChatMessageHistory()
-    return session_histories[session_id]
-
 # -------------------- Destination Chains --------------------
 from destination_chains import run_explaination_chain, run_translation_chain, run_exercise_chain, run_general_chain, DestinationChainArgs
-def get_destination_chain(arguments, session_id: str):
-    if arguments.destination == "explain":
-        return run_explaination_chain(arguments, session_id)
-    elif arguments.destination == "translate":
-        return run_translation_chain(arguments, session_id)
-    elif arguments.destination == "exercise":
-        return run_exercise_chain(arguments, session_id)
-    elif arguments.destination == "general":
+
+def get_destination_chain(arguments: DestinationChainArgs, session_id: str):
+    """
+    Controller that routes to the correct chain and handles complex flows
+    like explain-then-translate.
+    """
+    destination = arguments.destination
+    session_data = get_session_history(session_id)
+
+    if destination == "translate":
+        print("--- Destination: TRANSLATE. Orchestrating explain-then-translate flow. ---")
+        
+        english_answer_to_translate = ""
+        last_response = session_data.get("last_response")
+
+        # Check if the router identified a new, specific topic for this query.
+        # This is the highest priority.
+        if arguments.keyword and arguments.keyword.lower() != 'none':
+            print(f"--- New keyword '{arguments.keyword}' found. This takes precedence. ---")
+            print("--- Running explanation chain for the new topic first. ---")
+            
+            # Run the explanation chain for the new keyword.
+            explanation_response = run_explaination_chain(arguments, session_id)
+            english_answer_to_translate = explanation_response.answer
+            
+            # IMPORTANT: We save this new explanation as the context for the *next* turn.
+            session_data["last_response"] = explanation_response
+
+        # If no new keyword was found, check if it's a follow-up to a previous answer.
+        elif last_response and last_response.answer:
+            print("--- No new keyword. Assuming follow-up. Translating the previous response. ---")
+            english_answer_to_translate = last_response.answer
+
+        # If there's no new keyword AND no previous response, we can't do anything.
+        else:
+            return Response(
+                answer="I'm not sure what you want me to translate. Please ask a question like 'What is photosynthesis?' first.",
+                retrieved_documents=[]
+            )
+        # After running the translation chain, clear the last_response for the next turn
+        session_data["last_response"] = None
+
+        # Finally, call the translation chain with the determined English text.
+        return run_translation_chain(
+            text_to_translate=english_answer_to_translate,
+            target_language=arguments.target_language,
+            session_id=session_id
+        )
+
+    elif destination == "explain":
+        # For a simple explanation, we still need to save its result for potential follow-ups.
+        explanation_response = run_explaination_chain(arguments, session_id)
+        session_data["last_response"] = explanation_response
+        return explanation_response
+
+    elif destination == "exercise":
+        # An exercise response should also be saved.
+        exercise_response = run_exercise_chain(arguments, session_id)
+        session_data["last_response"] = exercise_response
+        return exercise_response
+
+    elif destination == "general":
+        # A general response should also be saved.
+        general_response = run_general_chain(arguments, session_id)
+        session_data["last_response"] = general_response
+        return general_response
+        
+    else:
+        # Fallback for unknown destination
         return run_general_chain(arguments, session_id)
-
-
+    # -------------------- Destination Chains End--------------------
 # -------------------- Router --------------------
 
 router_chains = {}
@@ -70,7 +122,7 @@ def get_router_chain(session_id: str):
         router_chains[session_id] = router_prompt | llm 
     chain_with_memory = RunnableWithMessageHistory(
                         router_chains[session_id],
-                        get_session_history,  # function returning a MessageHistory object
+                        get_chat_history,  # function returning a MessageHistory object
                         input_messages_key="input",  # required
                         history_messages_key="chat_history",  # used in your prompt
                     )
@@ -79,17 +131,33 @@ def get_router_chain(session_id: str):
 
     
 # -------------------- Endpoint --------------------
+
 @app.post("/ask", response_model=Response)
 async def ask_question(query: Query):
     try:
+        # The logic here remains the same, but we add more print statements for clarity
+        print("\n" + "="*50)
+        print(f"SESSION ID: {query.session_id}, QUESTION: \"{query.question}\"")
+        print("="*50)
+
+        # 1. Get the router's decision
         router_chain = get_router_chain(query.session_id)
-        answer = router_chain.invoke({"input": query.question},
-                                    config={"configurable": {"session_id": query.session_id}})
-        print(answer)
-        answer = output_parser(answer)
-        print(f"Parsed Answer: {answer}")
-        result = get_destination_chain(answer, query.session_id)
-        print(result)
+        router_output = router_chain.invoke({"input": query.question},
+                                            config={"configurable": {"session_id": query.session_id}})
+        
+        print(f"--- Router LLM Output ---\n{router_output.content}\n-------------------------")
+        
+        parsed_args = output_parser(router_output)
+        print(f"--- Parsed Router Args ---\nDestination: {parsed_args.destination}, Keyword: {parsed_args.keyword}\n--------------------------")
+
+        # 2. Execute the destination chain(s)
+        result = get_destination_chain(parsed_args, query.session_id)
+        print(f"--- Final Result ---\n{result}\n--------------------")
+
+        # 3. Save the final result to session history for the *next* turn
+        session_data = get_session_history(query.session_id)
+        session_data["last_response"] = result
+        print(f"--- Saved final response to session {query.session_id} for next turn. ---")
 
         return result
     except Exception as e:

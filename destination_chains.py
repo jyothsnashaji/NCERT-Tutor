@@ -20,10 +20,11 @@ import requests # Keep requests for potential error handling, though sarvamai cl
 
 from dotenv import load_dotenv
 load_dotenv()
+# Import the centralized session management functions
+from session_manager import get_session_history, get_chat_history
 
 
 explain_chains = {}
-session_histories = {}
 translation_chains = {}
 exercise_chains = {}
 general_chains = {}
@@ -114,11 +115,6 @@ def translate_text(text: str, target_lang_code: str) -> str:
 
 # --- SARVAM INTEGRATION END ---
 
-def get_session_history(session_id):
-    if session_id not in session_histories:
-        session_histories[session_id] = InMemoryChatMessageHistory()
-    return session_histories[session_id]
-
 class Quiz(BaseModel):
     question: str
     options: List[str]
@@ -139,7 +135,7 @@ class ExplainDestinationChain():
         self.session_id = session_id
         self.llm =  ChatOpenAI(model="gpt-4o-mini")
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-        self.vectorstore = FAISS.load_local("/Users/jshaji/Library/CloudStorage/OneDrive-Cisco/IISc/Deep Learning/NCERT-Tutor/vector_store", self.embeddings, allow_dangerous_deserialization=True)
+        self.vectorstore = FAISS.load_local("vector_store", self.embeddings, allow_dangerous_deserialization=True)
         self.retriever = self.vectorstore.as_retriever()
         self._chain = explain_prompt | self.llm
       
@@ -160,16 +156,15 @@ class ExplainDestinationChain():
             # Step 4: Add chat memory
             rag_chain_with_memory = RunnableWithMessageHistory(
                 rag_chain,
-                get_session_history,
+                get_chat_history,
                 input_messages_key="input",
                 history_messages_key="chat_history"
             )
 
             # Step 5: Run it
-            result = rag_chain_with_memory.invoke(
-                {"input": query, "chat_history": get_session_history(self.session_id).messages},
-                config={"configurable": {"session_id": self.session_id}}
-            )
+            result = rag_chain_with_memory.invoke( {"input": query },
+                                                  config={"configurable": {"session_id": self.session_id}}
+                                                  )
 
             print("=== RAG Chain Result ===")
             print(result)
@@ -189,7 +184,9 @@ class ExplainDestinationChain():
                     file=str(metadata.get("source", "Untitled")),
                     snippet=page_content[:300]  # First 300 characters
                 ))
-                    
+            # Step 6: Save the last response to session history for translation
+            session_data = get_session_history(self.session_id)
+            session_data["last_response"] =answer
 
             return Response(
                 answer=answer,
@@ -214,7 +211,7 @@ class ExerciseDestinationChain():
         self.session_id = session_id
         self.llm =  ChatOpenAI(model="gpt-4o-mini")
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-        self.vectorstore = FAISS.load_local("/Users/jshaji/Library/CloudStorage/OneDrive-Cisco/IISc/Deep Learning/NCERT-Tutor/vector_store", self.embeddings, allow_dangerous_deserialization=True)
+        self.vectorstore = FAISS.load_local("vector_store", self.embeddings, allow_dangerous_deserialization=True)
         self.retriever = self.vectorstore.as_retriever()
         self._chain = quiz_prompt | self.llm
 
@@ -244,8 +241,10 @@ class ExerciseDestinationChain():
             # Run the RAG chain with just `query` as input
             input = f"Generate {num_questions} MCQs for grade {grade} and subject {subject} for topic {query}."
 
-            result = rag_chain.invoke({"input": input, "chat_history": get_session_history(self.session_id).messages},
-                                      config={"configurable": {"session_id": self.session_id}})
+            result = rag_chain.invoke(
+                {"input": input, "chat_history": get_session_history(self.session_id)["chat_history"].messages},
+                config={"configurable": {"session_id": self.session_id}}
+            )
             print("=== RAG Chain Result ===")
             print(result)
 
@@ -323,7 +322,7 @@ def get_general_chain(session_id):
 def run_general_chain(arguments, session_id):
     chain = get_general_chain(session_id)
     answer =  chain._chain.invoke(
-        {"input": arguments.query, "chat_history": get_session_history(session_id).messages},
+        {"input": arguments.query, "chat_history": get_session_history(session_id)["chat_history"].messages},
         config={"configurable": {"session_id": session_id}}
     )
     return Response(answer=answer.content, retrieved_documents=[]) # Assuming no sources for general queries
@@ -344,53 +343,57 @@ def run_explaination_chain(arguments: DestinationChainArgs, session_id: str):
     chain = get_explaination_chain(session_id)
     return chain.get_rag_response(arguments.keyword)
 
-def run_translation_chain(arguments, session_id):
-    """Run the translation chain with the provided arguments and session ID.
-    Inputs: DestinationChainArgs object containing:
-        - destination: The type of destination (e.g., "explain", "translate", etc.)
-        - keyword: The keyword to search for in the context
-        - target_language: The language to translate to (if applicable)
-        - question: The question or query to be answered
-    Outputs: Response object containing:
-        - answer: The generated answer from the translation chain
-        - retrieved_documents: List of DocumentInfo objects containing source information
+def run_translation_chain(text_to_translate: str, target_language: str, session_id: str):
     """
-    # Assume arguments.query is the text to translate
-    english_answer = arguments.query
-    translation_requested = True
+    Run the translation chain with the provided text and target language.
+    Inputs:
+        - text_to_translate: The English text to be translated.
+        - target_language: The language to translate to (e.g., "hindi").
+        - session_id: The current session ID.
+    Outputs: Response object containing the translated answer.
+    """
+    if not text_to_translate:
+        return Response(answer="There is nothing to translate. Please ask a question first.", retrieved_documents=[])
 
     target_lang_code = None
     target_lang_name = None
 
-    if arguments.target_language:
-        lang = arguments.target_language.strip().lower()
+    if target_language:
+        lang = target_language.strip().lower()
         if lang in INDIAN_LANG_MAP:
             target_lang_code = INDIAN_LANG_MAP[lang]
             target_lang_name = lang
         else:
             available_langs = ", ".join(INDIAN_LANG_MAP.keys())
             msg = (
-                f"Sorry, translation to '{arguments.target_language}' is not available. "
+                f"Sorry, translation to '{target_language}' is not available. "
                 f"Available languages: {available_langs}.\n"
                 "Returning the English answer."
             )
             return Response(
-                answer=f"{arguments.question}\n\n{msg}",
+                answer=f"{text_to_translate}\n\n{msg}",
                 retrieved_documents=[]
             )
-    if translation_requested and target_lang_code:
-        print(f"Translation requested to {target_lang_name} ({target_lang_code}). Translating...")
-        translated_text = translate_text(english_answer, target_lang_code)
-        if translated_text != english_answer:
-            final_answer = translated_text
-            print("Translation successful.")
+
+    if target_lang_code:
+        print(f"--- Translation requested to {target_lang_name} ({target_lang_code}). Translating... ---")
+        translated_text = translate_text(text_to_translate, target_lang_code)
+        
+        final_answer = translated_text
+        if translated_text == text_to_translate:
+            # This means translation failed
+            print(f"--- Translation to {target_lang_name} failed. Returning English answer. ---")
+            final_answer = text_to_translate + f"\n\n(Note: Translation to {target_lang_name} failed.)"
         else:
-            print(f"Translation to {target_lang_name} failed. Returning English answer.")
-            final_answer = english_answer + f"\n\n(Note: Translation to {target_lang_name} failed.)"
+            print("--- Translation successful. ---")
+
+    else:
+        # This case should ideally not be hit if called correctly, but as a fallback:
+        final_answer = text_to_translate
 
     return Response(
         answer=final_answer,
-        retrieved_documents=[]
+        retrieved_documents=[] # No documents for a translation response
     )
 
 def run_exercise_chain(arguments, session_id):
