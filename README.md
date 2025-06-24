@@ -51,6 +51,11 @@ The resulting vector store is saved locally in the 'vector_store' directory for 
 ## Demo
 
 ![Explaination Response](Demo/Explaination.jpg)
+
 ![RAG Response](Demo/sources.jpg)
+
+![Evaluation](Demo/Translation.jpg)
+
 ![Exercise Response](Demo/quiz.jpg)
+
 ![Evaluation](Demo/Evaluation.jpg)
