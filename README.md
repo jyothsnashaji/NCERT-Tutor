@@ -43,10 +43,36 @@ All embedded document chunks are stored in a FAISS vector store, which is optimi
 
 The resulting vector store is saved locally in the 'vector_store' directory for efficient loading and reuse during inference.
 
-## To Do
-1. Add Translation Support
-2. Update exerise generation with T5
-3. Add evaluation dataset and metrics
+## Question Generation (QG)
+
+For generating pedagogically relevant questions, the system employs a T5 model. This model is fine-tuned using multiple strategies, including Parameter-Efficient Fine-Tuning (PEFT) and GPT-4-based self-instruct tuning. The combination of PEFT with self-instruct emerged as the most effective approach, consistently achieving higher accuracy, better lexical alignment, and greater question diversity.
+
+### QG Model Evaluation
+
+The quality of generated questions is assessed using three complementary automatic metrics:
+*   **BERT-F1**: Measures semantic similarity between generated questions and reference answers. Scores consistently around 0.85 indicate strong semantic grounding.
+*   **ROUGE-L**: Evaluates lexical overlap. Moderate scores (0.20–0.24) reflect the open-ended nature of question generation while retaining relevance.
+*   **Self-BLEU (BLEU-2)**: Assesses diversity in question formulation. Lower scores (typically <0.35 for PEFT-tuned models) indicate desirable diversity and less templated output, distinguishing it from full fine-tuning which showed signs of mode collapse.
+
+These evaluations confirm the model's capability to generate semantically sound, context-aware, and lexically diverse questions suitable for the NCERT curriculum.
+
+## Translation
+
+The system incorporates a robust translation pipeline to provide multilingual responses, primarily in Indian languages. It utilizes **Sarvam Translate V1**, a dedicated model optimized for efficient translation into Indic languages, chosen for its superior performance over general-purpose large language models in this domain.
+
+The process involves:
+1.  The Router Agent classifying the user query for translation.
+2.  A RAG pipeline first generates a high-quality English response based on the retrieved context.
+3.  This English output is then passed to the translation chain, which uses Sarvam Translate V1 to convert it into the user-specified Indic language (e.g., Hindi, Tamil, Kannada, Malayalam).
+
+### Translation Model Evaluation
+
+A comparative benchmarking study was performed to determine the optimal translation model. Llama, GPT-4o, and Sarvam models were evaluated across two distinct datasets:
+*   **Dataset 1**: AIKOSH (English to Hindi/Malayalam/Tamil/Kannada).
+*   **Dataset 2**: Custom-created dataset of 10 entries of English to Malayalam from SCERT Kerala English and Malayalam medium textbooks, which proved more domain-relevant.
+
+Evaluation used **BLEU** and **METEOR** metrics, alongside anecdotal human assessment. While initial tests on Dataset 1 showed GPT-4o performing well, human review consistently favored Sarvam AI. On the more domain-relevant Dataset 2, Sarvam AI clearly performed best in both automated tests and human review, confirming its suitability for the application's translation needs.
+
 
 ## Demo
 

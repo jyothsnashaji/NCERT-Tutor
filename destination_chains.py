@@ -98,8 +98,7 @@ def translate_text(text: str, target_lang_code: str) -> str:
                 speaker_gender="Male", # Defaulting as per notebook examples
                 mode="formal", # sarvam-translate:v1 only supports formal
                 # model="sarvam-translate:v1",
-                enable_preprocessing=False, # As per notebook examples
-                # numerals_format="international", # Can add this if needed
+                enable_preprocessing=False,
             )
             # The translated text is in the 'translated_text' attribute of the response object
             translated_chunks.append(response.translated_text)
